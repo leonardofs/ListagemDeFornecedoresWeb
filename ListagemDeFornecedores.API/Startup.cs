@@ -39,9 +39,9 @@ namespace ListagemDeFornecedores.API
                         .AllowAnyMethod();
                 });
             });
-            // using Microsoft.EntityFrameworkCore;
+
             
-            services.AddDbContext<FornecedorContext>(opt =>
+            services.AddDbContext<FornecedoresContext>(opt =>
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             
         }
@@ -59,6 +59,8 @@ namespace ListagemDeFornecedores.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors();
 
 
             app.UseEndpoints(endpoints =>

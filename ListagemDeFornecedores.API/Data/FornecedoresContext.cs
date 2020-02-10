@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ListagemDeFornecedores.API.Data
 {
-     public class FornecedorContext : DbContext
+     public class FornecedoresContext : DbContext
       {
 
-        public FornecedorContext(DbContextOptions<FornecedorContext> options) : base (options) { }
+        public FornecedoresContext(DbContextOptions<FornecedoresContext> options) : base (options) { }
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Fornecedor> Fornecedores { get; set; }
 

@@ -18,6 +18,6 @@ namespace ListagemDeFornecedores.API.Models
 
         public virtual FornecedorPJ fornecedorPJ { get; set; }
 
-    
+
     }
 }

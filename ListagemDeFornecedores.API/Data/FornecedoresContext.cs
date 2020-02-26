@@ -15,25 +15,39 @@ namespace ListagemDeFornecedores.API.Data
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-       
-            modelBuilder.Entity<Empresa>()
-               .HasKey(e => e.EmpresaId);
+      
 
+             modelBuilder.Entity<Empresa>()
+               .Property(e => e.EmpresaId)
+               .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Empresa>()
+                .HasOne(e => e.fornecedorPJ)
+                .WithOne(pj => pj.EmpresaFornecedor)
+                .HasForeignKey<FornecedorPJ>(pj => pj.EmpresaFornecedorId);
+                //.OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Fornecedor>()            
                 .HasOne(f => f.Empresa)
-                .WithMany(e => e.Fornecedores)
-                .HasForeignKey(f => f.EmpresaId);
+                .WithMany(e => e.Fornecedores);
+                //.HasForeignKey(f => f.EmpresaId);
 
-
-            modelBuilder.Entity<FornecedorPJ>()
-                .HasOne(pj => pj.EmpresaFornecedor)
-                .WithOne(e => e.fornecedorPJ)
-                .HasForeignKey("Empresa");
+            modelBuilder.Entity<Fornecedor>()
+                .HasDiscriminator<string>("Tipo")  
+                .HasValue<FornecedorPJ>("PJ")
+                .HasValue<FornecedorPF>("PF");
 
             modelBuilder.Entity<FornecedorPF>()
                .Property(pf =>pf.DataNascimento)
                .HasColumnType("datetime2");
+
+            // modelBuilder.Entity<FornecedorPJ>()
+            //     .HasOne(pj => pj.EmpresaFornecedor)
+            //     .WithOne(e => e.fornecedorPJ)
+            //     .HasForeignKey<>("Empresa");
+            //.OnDelete(DeleteBehavior.Cascade);
+                
+
 
     }
         

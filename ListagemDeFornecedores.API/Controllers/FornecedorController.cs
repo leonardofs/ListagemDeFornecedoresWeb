@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace ListagemDeFornecedores.API.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class FornecedorController : ControllerBase
     {
         public FornecedoresContext Context { get; }
@@ -20,15 +21,9 @@ namespace ListagemDeFornecedores.API.Controllers
         {
             this.Context = context;
         }
-        private readonly ILogger<FornecedorController> _logger;
-
-        public FornecedorController(ILogger<FornecedorController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
+         // GET api/fornecedor
+        [HttpGet("")]
+        public async Task <ActionResult<IEnumerable<Fornecedor>>> Get()
         {
             try
             {                

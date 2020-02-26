@@ -3,14 +3,16 @@ using System;
 using ListagemDeFornecedores.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ListagemDeFornecedores.API.Migrations
 {
-    [DbContext(typeof(FornecedorContext))]
-    partial class FornecedorContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(FornecedoresContext))]
+    [Migration("20200226144209_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,6 +21,7 @@ namespace ListagemDeFornecedores.API.Migrations
             modelBuilder.Entity("ListagemDeFornecedores.API.Models.Empresa", b =>
                 {
                     b.Property<int>("EmpresaId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CNPJ")
@@ -41,12 +44,12 @@ namespace ListagemDeFornecedores.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("EmpresaId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("FornecedorId");
 
@@ -54,7 +57,7 @@ namespace ListagemDeFornecedores.API.Migrations
 
                     b.ToTable("Fornecedores");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Fornecedor");
+                    b.HasDiscriminator<string>("Tipo").HasValue("Fornecedor");
                 });
 
             modelBuilder.Entity("ListagemDeFornecedores.API.Models.FornecedorPF", b =>
@@ -70,7 +73,7 @@ namespace ListagemDeFornecedores.API.Migrations
                     b.Property<string>("NomeFornecedor")
                         .HasColumnType("TEXT");
 
-                    b.HasDiscriminator().HasValue("FornecedorPF");
+                    b.HasDiscriminator().HasValue("PF");
                 });
 
             modelBuilder.Entity("ListagemDeFornecedores.API.Models.FornecedorPJ", b =>
@@ -80,16 +83,10 @@ namespace ListagemDeFornecedores.API.Migrations
                     b.Property<int>("EmpresaFornecedorId")
                         .HasColumnType("INTEGER");
 
-                    b.HasDiscriminator().HasValue("FornecedorPJ");
-                });
+                    b.HasIndex("EmpresaFornecedorId")
+                        .IsUnique();
 
-            modelBuilder.Entity("ListagemDeFornecedores.API.Models.Empresa", b =>
-                {
-                    b.HasOne("ListagemDeFornecedores.API.Models.FornecedorPJ", "fornecedorPJ")
-                        .WithOne("EmpresaFornecedor")
-                        .HasForeignKey("ListagemDeFornecedores.API.Models.Empresa", "EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasDiscriminator().HasValue("PJ");
                 });
 
             modelBuilder.Entity("ListagemDeFornecedores.API.Models.Fornecedor", b =>
@@ -97,6 +94,15 @@ namespace ListagemDeFornecedores.API.Migrations
                     b.HasOne("ListagemDeFornecedores.API.Models.Empresa", "Empresa")
                         .WithMany("Fornecedores")
                         .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ListagemDeFornecedores.API.Models.FornecedorPJ", b =>
+                {
+                    b.HasOne("ListagemDeFornecedores.API.Models.Empresa", "EmpresaFornecedor")
+                        .WithOne("fornecedorPJ")
+                        .HasForeignKey("ListagemDeFornecedores.API.Models.FornecedorPJ", "EmpresaFornecedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

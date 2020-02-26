@@ -7,7 +7,7 @@ namespace ListagemDeFornecedores.API.Models
 
         //Navigation Properties
         public int EmpresaId { get; set; }
-        public virtual Empresa Empresa { get; set; }
+        public  Empresa Empresa { get; set; }
 
     }
 }

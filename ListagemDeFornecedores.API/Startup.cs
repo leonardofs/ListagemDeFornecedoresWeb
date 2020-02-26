@@ -28,45 +28,51 @@ namespace ListagemDeFornecedores.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddCors(options =>
 
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.WithOrigins("http://*")
-                        .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
+             // Configurações para CORS.
+            services.AddCors();
 
-            
-            services.AddDbContext<FornecedoresContext>(opt =>
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            
+
+
+            // Realiza conexão com a base de dados.
+            services.AddDbContext<FornecedoresContext>(x =>
+                x.UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection")
+                )
+            );
+
+
+                // servicos adicionais
+
+            // Dados mockados para popular as tabelas.
+            services.AddTransient<DadosTeste>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+ 
+
+       // public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+       public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DadosTeste dados)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+           // app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
-            app.UseCors();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            
         }
     }
 }

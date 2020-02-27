@@ -1,4 +1,4 @@
-namespace ListagemDeFornecedores.Domain
+namespace ListagemDeFornecedores.Domain.Entity
 {
     public abstract class Fornecedor
     {

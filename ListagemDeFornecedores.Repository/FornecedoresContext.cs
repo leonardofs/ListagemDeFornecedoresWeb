@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ListagemDeFornecedores.Domain;
+using ListagemDeFornecedores.Domain.Entity;
 
 namespace ListagemDeFornecedores.Repository
 {
@@ -35,6 +35,9 @@ namespace ListagemDeFornecedores.Repository
             .HasColumnType("datetime2");
 
         }
+
+
+
 
 
     }

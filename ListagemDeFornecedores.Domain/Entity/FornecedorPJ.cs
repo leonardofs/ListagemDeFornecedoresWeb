@@ -1,8 +1,8 @@
-namespace ListagemDeFornecedores.Domain
+namespace ListagemDeFornecedores.Domain.Entity
+
 {
-    public class FornecedorPJ:Fornecedor
+    public class FornecedorPJ : Fornecedor
     {
-     
         //Navigation Properties
 
         public int EmpresaFornecedorId { get; set; }

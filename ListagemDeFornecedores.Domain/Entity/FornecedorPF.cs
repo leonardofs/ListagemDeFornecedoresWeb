@@ -1,6 +1,6 @@
 using System;
 
-namespace ListagemDeFornecedores.Domain
+namespace ListagemDeFornecedores.Domain.Entity
 {
     public class FornecedorPF:Fornecedor
     {

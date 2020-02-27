@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ListagemDeFornecedores.Domain
+namespace ListagemDeFornecedores.Domain.Entity
 {
     public class Empresa
     {

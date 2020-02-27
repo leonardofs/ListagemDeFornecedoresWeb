@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ListagemDeFornecedores.Domain;
+using ListagemDeFornecedores.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -13,16 +13,21 @@ namespace ListagemDeFornecedores.Repository
     public class DadosTeste
     {
         public FornecedoresContext _context { get; }
+        public EmpresaRepository _empresaRepository { get; }
 
-        public DadosTeste(FornecedoresContext context)
+        public DadosTeste(EmpresaRepository empresaRepository)
         {
-            this._context = context;
+
+            _empresaRepository = empresaRepository;
+
             var haDados = _context.Fornecedores.Any();
             if (!haDados)
             {
                 Task.Run(() => PopulaBancoEmpresas()).Wait();
                 Task.Run(() => PopulaBancoFornecedorEmpresa()).Wait();
             }
+
+            _empresaRepository = empresaRepository;
         }
 
         private async Task PopulaBancoEmpresas()

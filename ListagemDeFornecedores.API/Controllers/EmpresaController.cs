@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ListagemDeFornecedores.Repository;
-using ListagemDeFornecedores.Domain;
+using ListagemDeFornecedores.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 
@@ -14,19 +14,19 @@ namespace ListagemDeFornecedores.API.Controllers
     [ApiController]
     public class EmpresaController : ControllerBase
     {
-        public FornecedoresContext Context { get; }
+        public FornecedoresContext _context { get; }
         public EmpresaController(FornecedoresContext context)
         {
-            this.Context = context;
+            _context = context;
         }
 
         // GET api/empresa
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<Empresa>>> Get()
+        public async Task<ActionResult<IEnumerable<Empresa>>> GetEmpresasAsync()
         {
             try
             {
-                var results = await Context.Empresas.ToListAsync();
+                var results = await _context.Empresas.ToListAsync();
                 return Ok (results);
             }
             catch (System.Exception)
@@ -38,11 +38,11 @@ namespace ListagemDeFornecedores.API.Controllers
 
         // GET api/empresa/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Empresa>> GetEmpresaById(int id)
+        public async Task<ActionResult<Empresa>> GetEmpresaAsyncById(int id)
         {
             try
             {
-                var result = await Context.Empresas.Where(e=>e.EmpresaId==id).FirstOrDefaultAsync();
+                var result = await _context.Empresas.Where(e=>e.EmpresaId==id).FirstOrDefaultAsync();
                 return Ok(result);
             }
             catch (System.Exception)
@@ -54,15 +54,15 @@ namespace ListagemDeFornecedores.API.Controllers
 
         // POST api/empresa
         [HttpPost("")]
-        public async Task<IActionResult> PostEmpresa(Empresa value)
+        public async Task<IActionResult> PostEmpresaAsync(Empresa value)
         {
                 try
                 {     
                     Console.WriteLine("valor do id:"+value.EmpresaId.ToString());
                  
-                   await Context.Empresas.AddAsync(value);
+                   await _context.Empresas.AddAsync(value);
 
-                  Console.WriteLine("novo valor do id:"+value.EmpresaId.ToString());
+
                     
                     return Created(this.Request.Path+value.EmpresaId, value);
                 }
@@ -75,8 +75,9 @@ namespace ListagemDeFornecedores.API.Controllers
 
         // PUT api/empresa/5
         [HttpPut("{id}")]
-        public void Putstring(int id, string value)
+        public void PutEmpresa(int id, Empresa value )
         {
+            //TODO: atualizar empresa
 
         }
 

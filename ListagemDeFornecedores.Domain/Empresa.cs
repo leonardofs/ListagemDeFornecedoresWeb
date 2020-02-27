@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ListagemDeFornecedores.API.Models
+namespace ListagemDeFornecedores.Domain
 {
     public class Empresa
     {

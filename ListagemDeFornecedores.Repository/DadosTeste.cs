@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ListagemDeFornecedores.API.Data;
-using ListagemDeFornecedores.API.Models;
+using ListagemDeFornecedores.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace ListagemDeFornecedores.API.Data
+namespace ListagemDeFornecedores.Repository
 {
     public class DadosTeste
     {

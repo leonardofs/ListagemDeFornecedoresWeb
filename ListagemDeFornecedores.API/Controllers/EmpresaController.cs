@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ListagemDeFornecedores.API.Models;
-using ListagemDeFornecedores.API.Data;
+using ListagemDeFornecedores.Repository;
+using ListagemDeFornecedores.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 

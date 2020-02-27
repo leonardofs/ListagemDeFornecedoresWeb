@@ -1,4 +1,4 @@
-namespace ListagemDeFornecedores.API.Models
+namespace ListagemDeFornecedores.Domain
 {
     public abstract class Fornecedor
     {

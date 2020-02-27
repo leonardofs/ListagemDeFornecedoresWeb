@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ListagemDeFornecedores.API.Data;
-using ListagemDeFornecedores.API.Models;
+using ListagemDeFornecedores.Repository;
+using ListagemDeFornecedores.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,21 @@ namespace ListagemDeFornecedores.API.Controllers
             }
         }
 
-        
+        // GET api/fornecedor/5 
+        [HttpGet("{id}")]
+        public async Task <ActionResult<IEnumerable<Empresa>>> GetFornecedoresByEmpresaId(int id)
+        {
+            try
+            {
+                var results = await Context.Fornecedores.Where(f=>f.EmpresaId==id).ToListAsync();
+                return Ok(results);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,"Requisição Falhou");
+            }
+
+        }
 
 
 

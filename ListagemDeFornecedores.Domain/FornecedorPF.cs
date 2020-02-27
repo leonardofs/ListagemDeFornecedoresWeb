@@ -1,6 +1,6 @@
 using System;
 
-namespace ListagemDeFornecedores.API.Models
+namespace ListagemDeFornecedores.Domain
 {
     public class FornecedorPF:Fornecedor
     {

@@ -14,61 +14,37 @@ namespace ListagemDeFornecedores.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<Empresa>> GetEmpresasAsync()
+
+         public void Add<T>(T entity) where T : class
+        {
+            _context.Add(entity);
+        }
+
+        public void Delete<T>(T entity) where T : class
+        {
+            _context.Remove(entity);
+        }
+
+        public void Update<T>(T entity) where T : class
+        {
+            _context.Update(entity);
+
+        }
+
+        public async Task<IEnumerable<Empresa>> GetAsync()
         {
             return await _context.Empresas.ToListAsync();
         }
 
-        public async Task<Empresa> GetEmpresaAsyncById(int id)
+        public async Task<Empresa> GetAsyncById(int id)
         {
             return await _context.Empresas.Where(e => e.EmpresaId == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Empresa> PostEmpresaAsync(Empresa value)
+
+        public async Task<bool> SaveChangesAsync()
         {
-            try
-            {
-
-                await _context.Empresas.AddAsync(value);
-                await _context.SaveChangesAsync();
-                return value;
-
-            }
-            catch (System.Exception)
-            {
-
-                throw;
-            }
-        }
-        public async Task<bool> DeleteEmpresaAsyncById(int id)
-        {
-            try
-            {
-                var result = await GetEmpresaAsyncById(id);
-                _context.Empresas.Remove(result);
-                return await _context.SaveChangesAsync()> 0 ; 
-            }
-            catch (System.Exception)
-            {
-                return false;
-            }
-        }
-
-        public async Task<Empresa> PutEmpresaAsyncById(int id, Empresa value)
-        {
-
-            // var result = db.Empresas.Where(emp => emp.EmpresaId == _empresa.EmpresaId).FirstOrDefault();
-            //     if (result != null)
-            //     {
-            //         result.Nome = _empresa.Nome;
-            //         result.CNPJ = _empresa.CNPJ;
-            //         result.UF = _empresa.UF;
-
-            //         await db.SaveChangesAsync();
-
-            //     }
-            // TODO: edit empresa
-          throw new System.NotImplementedException();
+           return(await _context.SaveChangesAsync()) >0;
         }
     }
 }

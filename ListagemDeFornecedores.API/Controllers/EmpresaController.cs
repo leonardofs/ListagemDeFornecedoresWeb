@@ -14,10 +14,12 @@ namespace ListagemDeFornecedores.API.Controllers
     [ApiController]
     public class EmpresaController : ControllerBase
     {
-        public FornecedoresContext _context { get; }
-        public EmpresaController(FornecedoresContext context)
+
+        public IEmpresaRepository _repo { get; }
+
+        public EmpresaController(IEmpresaRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         // GET api/empresa
@@ -26,12 +28,12 @@ namespace ListagemDeFornecedores.API.Controllers
         {
             try
             {
-                var results = await _context.Empresas.ToListAsync();
-                return Ok (results);
+                var results = await _repo.GetAsync();
+                return Ok(results);
             }
             catch (System.Exception)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError,"Requisição Falhou");    
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Requisição Falhou");
             }
 
         }
@@ -42,51 +44,72 @@ namespace ListagemDeFornecedores.API.Controllers
         {
             try
             {
-                var result = await _context.Empresas.Where(e=>e.EmpresaId==id).FirstOrDefaultAsync();
+                var result = await _repo.GetAsyncById(id);
                 return Ok(result);
             }
             catch (System.Exception)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError,"Requisição Falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Requisição Falhou");
             }
         }
-
-
         // POST api/empresa
-        [HttpPost("")]
+        [HttpPost]
         public async Task<IActionResult> PostEmpresaAsync(Empresa value)
         {
-                try
-                {     
-                    Console.WriteLine("valor do id:"+value.EmpresaId.ToString());
-                 
-                   await _context.Empresas.AddAsync(value);
-
-
-                    
-                    return Created(this.Request.Path+value.EmpresaId, value);
-                }
-                catch (System.Exception)
+            try
+            {
+                _repo.Add(value);
+                if (await _repo.SaveChangesAsync())
                 {
-                    
-                    return this.StatusCode(StatusCodes.Status400BadRequest,"Não foi possivel salvar");
+                    return Created($"/api/Empresa/{value.EmpresaId}", value);
                 }
+            }
+            catch (System.Exception)
+            {
+
+                return this.StatusCode(StatusCodes.Status400BadRequest, "Não foi possivel salvar");
+            }
+            return BadRequest();
         }
 
-        // PUT api/empresa/5
-        [HttpPut("{id}")]
-        public void PutEmpresa(int id, Empresa value )
+        [HttpPut]
+        public async Task<IActionResult> PostEmpresaAsync(int id, Empresa value)
         {
-            //TODO: atualizar empresa
+            try
+            {
+                var _empresa = await _repo.GetAsyncById(id);
+                if (_empresa == null) return NotFound();
 
+                _repo.Update(value);
+               
+                if (await _repo.SaveChangesAsync())
+                {
+                    return Created($"/api/Empresa/{value.EmpresaId}", value);
+                }
+            }
+            catch (System.Exception)
+            {
+
+                return this.StatusCode(StatusCodes.Status400BadRequest, "Não foi possivel salvar");
+            }
+            return BadRequest();
         }
 
         // DELETE api/empresa/5
         [HttpDelete("{id}")]
-        public void DeletestringById(int id)
+        public async Task<IActionResult> Delete(Empresa value)
         {
+                var _empresa = await _repo.GetAsyncById(value.EmpresaId);
 
+                if (_empresa == null) return NotFound();
 
+                _repo.Delete(value);
+
+             if (await _repo.SaveChangesAsync())
+                {
+                    return Ok();
+                }
+            return BadRequest();
         }
     }
 }

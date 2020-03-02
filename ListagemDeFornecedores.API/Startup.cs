@@ -47,6 +47,8 @@ namespace ListagemDeFornecedores.API
 
             // Dados mockados para popular as tabelas.
             services.AddTransient<DadosTeste>();
+
+            services.AddScoped<IEmpresaRepository,EmpresaRepository>();
         }
 
  

@@ -16,7 +16,7 @@ namespace ListagemDeFornecedores.Repository.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1");
 
-            modelBuilder.Entity("ListagemDeFornecedores.Domain.Empresa", b =>
+            modelBuilder.Entity("ListagemDeFornecedores.Domain.Entity.Empresa", b =>
                 {
                     b.Property<int>("EmpresaId")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace ListagemDeFornecedores.Repository.Migrations
                     b.ToTable("Empresas");
                 });
 
-            modelBuilder.Entity("ListagemDeFornecedores.Domain.Fornecedor", b =>
+            modelBuilder.Entity("ListagemDeFornecedores.Domain.Entity.Fornecedor", b =>
                 {
                     b.Property<int>("FornecedorId")
                         .ValueGeneratedOnAdd()
@@ -58,9 +58,9 @@ namespace ListagemDeFornecedores.Repository.Migrations
                     b.HasDiscriminator<string>("Tipo").HasValue("Fornecedor");
                 });
 
-            modelBuilder.Entity("ListagemDeFornecedores.Domain.FornecedorPF", b =>
+            modelBuilder.Entity("ListagemDeFornecedores.Domain.Entity.FornecedorPF", b =>
                 {
-                    b.HasBaseType("ListagemDeFornecedores.Domain.Fornecedor");
+                    b.HasBaseType("ListagemDeFornecedores.Domain.Entity.Fornecedor");
 
                     b.Property<string>("Cpf")
                         .HasColumnType("TEXT");
@@ -74,9 +74,9 @@ namespace ListagemDeFornecedores.Repository.Migrations
                     b.HasDiscriminator().HasValue("PF");
                 });
 
-            modelBuilder.Entity("ListagemDeFornecedores.Domain.FornecedorPJ", b =>
+            modelBuilder.Entity("ListagemDeFornecedores.Domain.Entity.FornecedorPJ", b =>
                 {
-                    b.HasBaseType("ListagemDeFornecedores.Domain.Fornecedor");
+                    b.HasBaseType("ListagemDeFornecedores.Domain.Entity.Fornecedor");
 
                     b.Property<int>("EmpresaFornecedorId")
                         .HasColumnType("INTEGER");
@@ -87,20 +87,20 @@ namespace ListagemDeFornecedores.Repository.Migrations
                     b.HasDiscriminator().HasValue("PJ");
                 });
 
-            modelBuilder.Entity("ListagemDeFornecedores.Domain.Fornecedor", b =>
+            modelBuilder.Entity("ListagemDeFornecedores.Domain.Entity.Fornecedor", b =>
                 {
-                    b.HasOne("ListagemDeFornecedores.Domain.Empresa", "Empresa")
+                    b.HasOne("ListagemDeFornecedores.Domain.Entity.Empresa", "Empresa")
                         .WithMany("Fornecedores")
                         .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ListagemDeFornecedores.Domain.FornecedorPJ", b =>
+            modelBuilder.Entity("ListagemDeFornecedores.Domain.Entity.FornecedorPJ", b =>
                 {
-                    b.HasOne("ListagemDeFornecedores.Domain.Empresa", "EmpresaFornecedor")
+                    b.HasOne("ListagemDeFornecedores.Domain.Entity.Empresa", "EmpresaFornecedor")
                         .WithOne("fornecedorPJ")
-                        .HasForeignKey("ListagemDeFornecedores.Domain.FornecedorPJ", "EmpresaFornecedorId")
+                        .HasForeignKey("ListagemDeFornecedores.Domain.Entity.FornecedorPJ", "EmpresaFornecedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

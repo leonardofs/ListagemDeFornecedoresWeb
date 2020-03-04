@@ -41,7 +41,9 @@ namespace ListagemDeFornecedores.Repository
             return await _context.Empresas.Where(e => e.EmpresaId == id).FirstOrDefaultAsync();
         }
 
-
+        public async Task<bool> HaEmpresas(){
+            return (await _context.Empresas.AnyAsync());
+        }
         public async Task<bool> SaveChangesAsync()
         {
            return(await _context.SaveChangesAsync()) >0;

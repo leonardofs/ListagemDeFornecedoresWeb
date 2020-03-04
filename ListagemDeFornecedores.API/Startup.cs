@@ -28,13 +28,6 @@ namespace ListagemDeFornecedores.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
-             // Configurações para CORS.
-            services.AddCors();
-
-
-
             // Realiza conexão com a base de dados.
             services.AddDbContext<FornecedoresContext>(x =>
                 x.UseSqlite(
@@ -42,18 +35,20 @@ namespace ListagemDeFornecedores.API
                 )
             );
 
+            services.AddControllers();
 
-                // servicos adicionais
+            // Configurações para CORS.
+            services.AddCors();
 
             // Dados mockados para popular as tabelas.
-            services.AddTransient<DadosTeste>();
+            services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 
-            services.AddScoped<IEmpresaRepository,EmpresaRepository>();
+            services.AddTransient<DadosTeste>();
         }
 
  
 
-       // public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    // public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DadosTeste dados)
         {
             if (env.IsDevelopment())

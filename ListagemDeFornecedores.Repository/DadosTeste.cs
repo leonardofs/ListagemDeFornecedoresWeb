@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -12,28 +13,30 @@ namespace ListagemDeFornecedores.Repository
 {
     public class DadosTeste
     {
+
+        public IEmpresaRepository _repo { get; }
         public FornecedoresContext _context { get; }
-        public EmpresaRepository _empresaRepository { get; }
 
-        public DadosTeste(EmpresaRepository empresaRepository)
+        public DadosTeste(FornecedoresContext context, IEmpresaRepository repo)
+        //public DadosTeste( EmpresaRepository repo)
         {
+            //todo: temporario até implementação do repositorio para os fornecedores
+           // _context = context;
+            _repo = repo;
 
-            _empresaRepository = empresaRepository;
+           var dados = Task<bool>.Run(async () => { return  await _repo.HaEmpresas(); });
 
-            var haDados = _context.Fornecedores.Any();
-            if (!haDados)
+            if (!dados.Result)
             {
                 Task.Run(() => PopulaBancoEmpresas()).Wait();
                 Task.Run(() => PopulaBancoFornecedorEmpresa()).Wait();
             }
-
-            _empresaRepository = empresaRepository;
         }
 
         private async Task PopulaBancoEmpresas()
         {
 
-            var data = System.IO.File.ReadAllText("Data/json/Empresas.json");
+            var data = System.IO.File.ReadAllText("..//ListagemDeFornecedores.Repository/json/Empresas.json");
             var _empresas = JsonSerializer.Deserialize<List<Empresa>>(data);
             foreach (var empresa in _empresas)
             {
@@ -44,33 +47,31 @@ namespace ListagemDeFornecedores.Repository
                     UF = empresa.UF
                 };
 
-                await _context.Empresas.AddAsync(_empresa);
+                _repo.Add(_empresa);
             }
-
-            await _context.SaveChangesAsync();
-
+            await _repo.SaveChangesAsync();
         }
 
         private async Task PopulaBancoFornecedorEmpresa()
         {
 
-            var pjdata = System.IO.File.ReadAllText("Data/json/FornecedoresPJ.json");
+            var pjdata = System.IO.File.ReadAllText("..//ListagemDeFornecedores.Repository/json/FornecedoresPJ.json");
 
             var _fornecedoresPJ = JsonSerializer.Deserialize<List<FornecedorPJ>>(pjdata);
             foreach (var _fornecedor in _fornecedoresPJ)
             {
+                //TODO:  corrigir com repositorio
                 await _context.Fornecedores.AddAsync(_fornecedor);
             }
 
-            var pfdata = System.IO.File.ReadAllText("Data/json/FornecedoresPF.json");
+            var pfdata = System.IO.File.ReadAllText("..//ListagemDeFornecedores.Repository/json/FornecedoresPF.json");
             var _fornecedoresPF = JsonSerializer.Deserialize<List<FornecedorPF>>(pfdata);
             foreach (var _fornecedor in _fornecedoresPF)
             {
+                //Todo: corrigir com repositorio
                 await _context.Fornecedores.AddAsync(_fornecedor);
             }
-
             await _context.SaveChangesAsync();
-
         }
 
     }
